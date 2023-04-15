@@ -1,28 +1,36 @@
 const {
      getPokemons,
-     getAllPokemons,
+     PokemonsBYName,
      createPokemon,
      getPokeById,
-     PokemonsNameType
+     searchPokeType
      } = require('../PokeControllers/PokeControllers')
+
 const {Pokemon, Type} = require('sequelize');
 
 
-const getpokeHandler = async (req,res)=>{
-   const allPokemons = await getPokemons(); 
-   return res.status(200).json(allPokemons);
-      
-}
-const getPokeByNameType = async(req, res)=>{
-   const {name, type} = req.query;
+                          //! HANDLER BY NAME
+const getPokeHandlerBYName= async(req, res)=>{
+   const {name} = req.query;
+   
    try {
-         const pokemones = await PokemonsNameType(name, type);
-         return res.status(200).json(pokemones) 
+         const pokedex = name? await PokemonsBYName(name) : await getPokemons()
+         return res.status(200).json(pokedex) 
    } catch (error) {
       return res.status(401).json({error: error.message});
    }
 }
 
+                           //! HANDLER BY TYPE! 
+const getPokeHandlerByType = async(req, res)=>{
+   try {
+      res.status(200).json( await searchPokeType())
+   } catch (error) {
+      res.status(404).json({error: error.message})
+   } 
+}
+
+                            //! HANDLER BY ID
 const getpokeIDHandler = async (req, res) =>{
    try {
       const {id} = req.params;
@@ -36,6 +44,7 @@ const getpokeIDHandler = async (req, res) =>{
 }
 
 
+                           //! HANDLER POST
 const postpokeHandler = async(req, res) =>{
   try {
    const {name,image,hp,attack,defense,speed,height,weight,types}= req.body;
@@ -49,4 +58,4 @@ const postpokeHandler = async(req, res) =>{
 
 
 
-module.exports = {getpokeHandler, getpokeIDHandler, postpokeHandler, getPokeByNameType}
+module.exports = { getpokeIDHandler, postpokeHandler, getPokeHandlerBYName, getPokeHandlerByType}

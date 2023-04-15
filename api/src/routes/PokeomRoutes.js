@@ -1,11 +1,9 @@
 const {Router} = require('express')
-const {getpokeHandler,getpokeIDHandler,postpokeHandler, getPokeByNameType} = require('../PokemonHandlers/PokemonHandlers')
+const {getpokeIDHandler,postpokeHandler, getPokeHandlerBYName} = require('../PokemonHandlers/PokemonHandlers')
 
 const pokerouters = Router()
 
-pokerouters.get('/', getpokeHandler)
-
-pokerouters.get('/', getPokeByNameType)
+pokerouters.get('/', getPokeHandlerBYName)
 
 pokerouters.get("/:id", getpokeIDHandler)
 

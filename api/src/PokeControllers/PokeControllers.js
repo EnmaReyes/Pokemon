@@ -1,10 +1,8 @@
 const axios = require("axios");
 const { Pokemon, Type } = require("../db");
 
-
+                                     ////! GET POKEMONS\\\\\
 const pokeApi = "https://pokeapi.co/api/v2/pokemon";
-const urlType = "https://pokeapi.co/api/v2/type";
-
 const getPokemons = async () => {
   const response = await axios.get(`${pokeApi}?limit=20`);
 
@@ -17,7 +15,7 @@ const getPokemons = async () => {
         return {
           id,
           name,
-          image: sprites.other.home.front_default,
+          image: sprites.other.official-artwork.front_default,
           type: types.map((t) => t.type.name),
           hp: stats[0].base_stat,
           attack: stats[1].base_stat,
@@ -33,10 +31,12 @@ const getPokemons = async () => {
 
   return await Promise.all(promises);
 };
-//! getbyID !!
+
+                                     ////! GET BY ID \\\\
 const sarchId = async(id)=>{
   const  response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
   const { name, sprites, types, weight, stats, height } = response.data;
+ 
         return {
           id,
           name,
@@ -62,79 +62,53 @@ const getPokeById = async (id, source) => {
   return Pokedex;
 };
 
+                                     ////! GET BY NAME\\\\
 
-//! pokemones de DB
-async function getPokemonsDb(){
-  try{
-      const arrayPokemonsDb = await Pokemon.findAll({
-          include:{
-              attributes: ["name"],
-              model: Type,
-              through: {
-              attributes: [],
-              },
-          }
-      });
-
-      return arrayPokemonsDb;
-  } catch(error){
-      return error;
-  }
-  // ---------------------------- end - carga de pokemon DB
+const searchpokename = async (name) =>{
+  const lowerName= name.toLowerCase()
+  const  response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${lowerName}`)
+  const {id, sprites, types, weight, stats, height } = response.data;
+ 
+        return {
+          id,
+          name,
+          image: sprites.other.home.front_default,
+          type: types.map((t) => t.type.name),
+          hp: stats[0].base_stat,
+          attack: stats[1].base_stat,
+          defense: stats[2].base_stat,
+          speed: stats[5].base_stat,
+          weight,
+          height,
+          created: false,
+        }
 }
-//! todos los pokemones
-async function getAllPokemons() {
-  try {
-    let apiPokemons = await getPokemons();
-    let dbPokemons = await getPokemonsDb(); 
-    const pokemonsApiDb = apiPokemons.concat(dbPokemons);
-    console.log(pokemonsApiDb);
-    return pokemonsApiDb;
-  } catch (error) {
-    return error;
-  }
-};
+const PokemonsBYName = async (name)=>{
+  // console.log(name);
+  const apiPokemons = await searchpokename(name);
+  const dbPokemons = await Pokemon.findAll({where: {name:name}});
+  return [apiPokemons, ...dbPokemons]
+}
 
-//! pokemon por NAME y TYPE !!
-  const PokemonsNameType = async (name, type) =>{
-    const allPokemons =  await getAllPokemons();
-    const typePokemons = await getAllPokemons();
-    switch (true) {
-      case name: let namePokemon = allPokemons.filter((pn)=>
-                 pn.name.tolowercase().includes(name.toLocaletoLowerCase())
-                 ).slice(0, 15);w
-    return namePokemon;
-      break;
-  
-      case type:  let typePokemon = typePokemons.filter((pt)=>
-                  pt.types.tolowercase().includes(type.toLocaletoLowerCase())
-                  ).slice(0, 15);
-      return typePokemon;
-    default: return allPokemons;
-      break;
-  }
+                                 ////! GET BY TYPE\\\\
+
+const searchPokeType = async () => {
+  const URLAPI = (await axios.get("https://pokeapi.co/api/v2/type"));
+  const types = URLAPI.data.results;
+  const allTypes = [];
+
+    for (let type of types){
+      const viewExist = await Type.findOne({where:{name: type.name}
+      });
+      viewExist? 
+      allTypes.push(viewExist)
+      : allTypes.push(await Type.create({name: type.name}));
+    }
     
-    // if(name){
-    //   let namepokemon = allPokemons.filter((pn)=>
-    //   pn.name.tolowercase().include(name.toLocaletoLowerCase())
-    //   ).slice(0, 10);
-    //   return namepokemon;
-    // }else{
-    //   return allPokemons
-    // }
+    return allTypes;
+    }
 
-    // if(type){
-    //   let typePokemon = allPokemons.filter((pt)=>
-    //   pt.name.tolowercase().include(type.toLocaletoLowerCase())
-    //   ).slice(0, 10);
-    //   return typePokemon;
-    // }else{
-    //   return allPokemons
-    // }
-
-
-};
-//! Post !!
+                               ////! Post !!\\\
 const createPokemon = async (name,image,hp,attack,defense,speed,height,weight,types)=>{
   
   if(!name|| !hp || !attack || !defense || !speed || !height || !weight|| !types ){ 
@@ -149,4 +123,5 @@ const createPokemon = async (name,image,hp,attack,defense,speed,height,weight,ty
  return newPokemon
  }
 
-module.exports = {getPokemons, getAllPokemons, createPokemon,getPokeById, PokemonsNameType};
+module.exports = {getPokemons, createPokemon,getPokeById, PokemonsBYName, searchPokeType};
+
