@@ -10,13 +10,9 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       id: {
-        type: DataTypes.UUID, //TIPO UUID 4873js- 938ksns- 093uks- 09u4is-
+        type: DataTypes.UUID, 
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4, //SE VAN A CREAR AUTOMATICAMENTE
-        // type: DataTypes.INTEGER,
-        // allowNull: false,
-        // primaryKey: true,
-        // autoIncrement: true,
+        defaultValue: DataTypes.UUIDV4,
       },
       hp: {
         type: DataTypes.INTEGER,
@@ -39,8 +35,8 @@ module.exports = (sequelize) => {
       image: {
         type: DataTypes.STRING,
       },
-      types: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+      type: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
        
       },
     },

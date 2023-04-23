@@ -3,7 +3,8 @@ const {
      PokemonsBYName,
      createPokemon,
      getPokeById,
-     searchPokeType
+     searchPokeType,
+     getAllPokes
      } = require('../PokeControllers/PokeControllers')
 
 const {Pokemon, Type} = require('sequelize');
@@ -14,10 +15,10 @@ const getPokeHandlerBYName= async(req, res)=>{
    const {name} = req.query;
    
    try {
-         const pokedex = name? await PokemonsBYName(name) : await getPokemons()
+         const pokedex = name? await PokemonsBYName(name) : await getAllPokes()
          return res.status(200).json(pokedex) 
    } catch (error) {
-      return res.status(401).json({error: error.message});
+      return res.status(401).json({error: `no se encontro a ${name}`});
    }
 }
 
@@ -46,16 +47,20 @@ const getpokeIDHandler = async (req, res) =>{
 
                            //! HANDLER POST
 const postpokeHandler = async(req, res) =>{
+   
   try {
-   const {name,image,hp,attack,defense,speed,height,weight,types}= req.body;
-   const newPokemon = await createPokemon(name,image,hp,attack,defense,speed,height,weight,types)
+   const {name,image,hp,attack,defense,
+          speed,height,weight,type}= req.body;
+
+   const newPokemon = await createPokemon({name,image,hp,attack,defense,
+      speed,height,weight,type})
+   
    res.status(200).json(newPokemon)
    
   } catch (error) {
-   res.status(401).json({error:"error"})
+   res.status(401).json({error: "no se guardó tu pokemon"})
   }
 }
-
 
 
 module.exports = { getpokeIDHandler, postpokeHandler, getPokeHandlerBYName, getPokeHandlerByType}
