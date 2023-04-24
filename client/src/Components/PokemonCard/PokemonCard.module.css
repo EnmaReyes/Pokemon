@@ -1,0 +1,64 @@
+
+.card{
+    width: 100%;
+    height: 260px;
+    border-bottom: 1px solid black;
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(43,43,73,1) 24%, rgba(55,160,186,1) 74%, rgba(7,89,89,1) 100%);
+    flex-wrap: wrap;
+    gap: 1em;
+    text-transform: capitalize;
+}
+.card:hover{
+    color:antiquewhite
+    
+
+}
+.infocard{
+    position: relative;
+    left: 40px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.card img{
+    width: 260px;
+}
+.name ,.id{
+    position: relative;
+    top: -50px;
+    left: 20px;
+
+}
+.name{
+    font-size: 40px;
+}
+.id{
+    font-size: 25px;
+}
+.card Link{
+    text-decoration: none;
+    color: inherit;
+    
+
+}
+
+.type{
+    position: relative;
+    left: 300px;
+    bottom: 130px;
+    text-align: left;
+    word-spacing: 10px;
+}
+.Estilos{
+    padding: 3px;
+    text-align: center;
+    border-radius: 5px;
+    margin: 3px;
+    font-family: fantasy;
+    font-size: 25px;
+    text-transform: capitalize;
+    display: inline;
+    
+
+}

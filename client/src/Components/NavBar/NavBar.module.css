@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Plaster&family=Stardos+Stencil:wght@700&display=swap');
+.NavBar{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) 3fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    align-items: flex-end;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    
+}
+
+.linkH , .linkC{
+    text-decoration: none;
+    color: inherit;
+    font-family: 'Stardos Stencil', cursive;
+    font-size: 30px;
+    transition: 500ms ease-in-out;
+}
+.linkC:hover{
+    color: beige;
+    text-shadow: 0 0 15px rgba(255,255,255,.5), 0 0 10px rgba(255,255,255,.5);
+}
+.linkH:hover{
+    color: beige;
+    text-shadow: 0 0 15px rgba(255,255,255,.5), 0 0 10px rgba(255,255,255,.5);
+}
+
+

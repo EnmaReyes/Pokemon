@@ -1,0 +1,19 @@
+
+.paginado{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    list-style: none;
+    padding: 14px;
+    margin: 0;
+}
+.botones{
+    font-family: fantasy;
+    font-size: 20px;
+    transition: background-color .3s;
+}
+.botones:hover{
+    color: rgb(253, 253, 253);
+    background-color: rgb(165, 165, 165);
+    
+}

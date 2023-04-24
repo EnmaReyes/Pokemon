@@ -1,0 +1,66 @@
+.barra{
+    position: relative;
+   
+}
+
+.barra input{
+    border: 0px;
+    border-radius: 40em;
+    background-color: #FFFFFF;
+    box-shadow: #ADCFFF 0 -12px 6px inset;
+    color: #000000;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 18px 0px 14px 0px;
+    display: inline-block;
+    outline: none;
+    margin-right: 2%;
+    text-align: center;
+    width: 300px;
+    height: 5px;
+}
+.barra input:hover{
+  border: #1395ac 2px solid;
+  box-shadow: #7ac6f8 0 -6px 8px inset;
+}
+.button73 {
+  appearance: none;
+  background-color: #FFFFFF;
+  border-radius: 50px;
+  border-style: none;
+  box-shadow: #ADCFFF 0 -12px 6px inset;
+  color: #000000;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,sans-serif;
+  margin: 0;
+  outline: none;
+  quotes: auto;
+  text-align: center;
+  text-decoration: none;
+  transition: all .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button73:hover {
+  background-color: #3fabdd;
+  box-shadow: #0a2680 0 -6px 8px inset;
+  transform: scale(1.125);
+}
+
+.button73:active {
+  transform: scale(1.025);
+}
+
+@media (min-width: 768px) {
+  .button73 {
+    font-size: 1.5rem;
+    padding: .75rem 2rem;
+  }
+}
+.img{
+  width: 22px;
+  margin: 0px;
+}
