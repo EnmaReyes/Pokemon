@@ -8,6 +8,7 @@ module.exports = (sequelize) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true
       },
       id: {
         type: DataTypes.UUID, 
@@ -34,10 +35,6 @@ module.exports = (sequelize) => {
       },
       image: {
         type: DataTypes.STRING,
-      },
-      type: {
-        type: DataTypes.ARRAY(DataTypes.INTEGER),
-       
       },
     },
     {

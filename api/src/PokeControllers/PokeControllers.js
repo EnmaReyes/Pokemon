@@ -17,7 +17,7 @@ const getPokemons = async () => {
           id,
           name,
           image: sprites.other['official-artwork'].front_default,
-          type: types.map((t) => t.type.name),
+          Types: types.map((t) => t.type.name),
           hp: stats[0].base_stat,
           attack: stats[1].base_stat,
           defense: stats[2].base_stat,
@@ -62,7 +62,7 @@ const sarchId = async(id)=>{
           id,
           name,
           image: sprites.other['official-artwork'].front_default,
-          type: types.map((t) => t.type.name),
+          Types: types.map((t) => t.type.name),
           hp: stats[0].base_stat,
           attack: stats[1].base_stat,
           defense: stats[2].base_stat,
@@ -94,7 +94,7 @@ const searchpokename = async (name) =>{
           id,
           name,
           image: sprites.other['official-artwork'].front_default,
-          type: types.map((t) => t.type.name),
+          Types: types.map((t) => t.type.name),
           hp: stats[0].base_stat,
           attack: stats[1].base_stat,
           defense: stats[2].base_stat,
@@ -144,15 +144,22 @@ const createPokemon = async (
   defense,
   height,
   weight,
-  image}
-  
+  image,}
 ) => {
-  const [pokemon, created] = await Pokemon.findOrCreate({
-    where: { name },
-    defaults: { name, hp,image, attack, speed, defense, height, weight}
+  
+  const pokemon = await Pokemon.create({
+    name,
+    hp,
+    image,
+    attack,
+    speed,
+    defense,
+    height,
+    weight,
   });
-  pokemon.addTypes(type)
-  return created ? await pokemon : { message: "Pokemon already exists" };
+  await pokemon.addTypes(type);
+
+  return pokemon;
 };
 
 module.exports = {getPokemons, createPokemon,getPokeById, PokemonsBYName, searchPokeType, getAllPokes};

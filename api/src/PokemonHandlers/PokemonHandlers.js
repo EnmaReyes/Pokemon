@@ -47,11 +47,11 @@ const getpokeIDHandler = async (req, res) =>{
 
                            //! HANDLER POST
 const postpokeHandler = async(req, res) =>{
-   
+
   try {
    const {name,image,hp,attack,defense,
           speed,height,weight,type}= req.body;
-
+          
    const newPokemon = await createPokemon({name,image,hp,attack,defense,
       speed,height,weight,type})
    
@@ -61,6 +61,7 @@ const postpokeHandler = async(req, res) =>{
    res.status(401).json({error: "no se guardó tu pokemon"})
   }
 }
+
 
 
 module.exports = { getpokeIDHandler, postpokeHandler, getPokeHandlerBYName, getPokeHandlerByType}
