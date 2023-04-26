@@ -47,7 +47,7 @@ const getpokeIDHandler = async (req, res) =>{
 
                            //! HANDLER POST
 const postpokeHandler = async(req, res) =>{
-
+    console.log(req.body);
   try {
    const {name,image,hp,attack,defense,
           speed,height,weight,type}= req.body;
