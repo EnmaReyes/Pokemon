@@ -3,6 +3,7 @@ import PokemonCard from "../PokemonCard/PokemonCard";
 import Pikachu_Caminando from "./img/Pikachu_Caminando.gif"
 
 export const PokemonConteiner = ({pokemones}) => {
+ 
     return (
       <div className={style.contendor}>
         {pokemones.length > 0 ? (
@@ -13,7 +14,7 @@ export const PokemonConteiner = ({pokemones}) => {
                 id={pk.id}
                 name={pk.name}
                 image={pk.image}
-                type={pk.type}
+                type={pk.Types}
               />
             ))}
           </div>

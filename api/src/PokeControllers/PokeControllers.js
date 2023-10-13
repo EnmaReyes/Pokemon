@@ -1,8 +1,8 @@
 const axios = require("axios");
 const { Pokemon, Type } = require("../db");
-const {Op} = require('sequelize')
+const { Op } = require("sequelize");
 
-                               ////! GET POKEMON BY API\\\\\
+////! GET POKEMON BY API\\\\\
 const pokeApi = "https://pokeapi.co/api/v2/pokemon";
 const getPokemons = async () => {
   const response = await axios.get(`${pokeApi}?limit=150`);
@@ -16,7 +16,7 @@ const getPokemons = async () => {
         return {
           id,
           name,
-          image: sprites.other['official-artwork'].front_default,
+          image: sprites.other["official-artwork"].front_default,
           Types: types.map((t) => t.type.name),
           hp: stats[0].base_stat,
           attack: stats[1].base_stat,
@@ -32,111 +32,107 @@ const getPokemons = async () => {
 
   return await Promise.all(promises);
 };
-                              ////! GET ALL POKEMONS
+////! GET ALL POKEMONS
 const getAllPokes = async () => {
-
   const databasePokes = await Pokemon.findAll({
     include: {
       model: Type,
-      attributes: ['name'],
-      through:{
-        attributes: []
-      }
+      attributes: ["name"],
+      through: {
+        attributes: [],
+      },
     },
-  })
-  const pokesWithTypes = databasePokes.map(poke => {
-    const Types = poke.Types.map(type => type.name);
-    return {...poke.toJSON(), Types};
-})
+  });
+  const pokesWithTypes = databasePokes.map((poke) => {
+    const Types = poke.Types.map((type) => type.name);
+    return { ...poke.toJSON(), Types };
+  });
 
-  const apiPokes = await getPokemons()
+  const apiPokes = await getPokemons();
   return [...pokesWithTypes, ...apiPokes];
 };
 
-                                     ////! GET BY ID \\\\
-const sarchId = async(id)=>{
-  const  response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+////! GET BY ID \\\\
+const sarchId = async (id) => {
+  const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
   const { name, sprites, types, weight, stats, height } = response.data;
- 
-        return {
-          id,
-          name,
-          image: sprites.other['official-artwork'].front_default,
-          Types: types.map((t) => t.type.name),
-          hp: stats[0].base_stat,
-          attack: stats[1].base_stat,
-          defense: stats[2].base_stat,
-          speed: stats[5].base_stat,
-          weight,
-          height,
-          created: false,
-        };
-        
-}
+
+  return {
+    id,
+    name,
+    image: sprites.other["official-artwork"].front_default,
+    Types: types.map((t) => t.type.name),
+    hp: stats[0].base_stat,
+    attack: stats[1].base_stat,
+    defense: stats[2].base_stat,
+    speed: stats[5].base_stat,
+    weight,
+    height,
+    created: false,
+  };
+};
 
 const getPokeById = async (id, source) => {
-  const Pokedex =
-    source === "API"
-      ? sarchId(id)
-      : await Pokemon.findByPk(id);
-      
+  const Pokedex = source === "API" ? sarchId(id) : await Pokemon.findByPk(id);
+
   return Pokedex;
 };
 
-                                     ////! GET BY NAME\\\\
+////! GET BY NAME\\\\
 
-const searchpokename = async (name) =>{
-  const lowerName= name.toLowerCase()
-  const  response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${lowerName}`)
-  const {id, sprites, types, weight, stats, height } = response.data;
- 
-        return {
-          id,
-          name,
-          image: sprites.other['official-artwork'].front_default,
-          Types: types.map((t) => t.type.name),
-          hp: stats[0].base_stat,
-          attack: stats[1].base_stat,
-          defense: stats[2].base_stat,
-          speed: stats[5].base_stat,
-          weight,
-          height,
-          created: false,
-        }
-}
-const PokemonsBYName = async (name)=>{
+const searchpokename = async (name) => {
+  const lowerName = name.toLowerCase();
+  const response = await axios.get(
+    `https://pokeapi.co/api/v2/pokemon/${lowerName}`
+  );
+  const { id, sprites, types, weight, stats, height } = response.data;
+
+  return {
+    id,
+    name,
+    image: sprites.other["official-artwork"].front_default,
+    Types: types.map((t) => t.type.name),
+    hp: stats[0].base_stat,
+    attack: stats[1].base_stat,
+    defense: stats[2].base_stat,
+    speed: stats[5].base_stat,
+    weight,
+    height,
+    created: false,
+  };
+};
+const PokemonsBYName = async (name) => {
   const apiPokemons = await searchpokename(name);
-  const dbPokemons = await Pokemon.findAll({ where: {
-    name: name}});
-     return [apiPokemons, ...dbPokemons];
-}
+  const dbPokemons = await Pokemon.findAll({
+    where: {
+      name: name,
+    },
+  });
+  return [apiPokemons, ...dbPokemons];
+};
 
-
-
-
-                                 ////! GET BY TYPE\\\\
+////! GET BY TYPE\\\\
 
 const searchPokeType = async () => {
-  const URLAPI = (await axios.get("https://pokeapi.co/api/v2/type"));
+  const URLAPI = await axios.get("https://pokeapi.co/api/v2/type");
   const types = URLAPI.data.results;
   const allTypes = [];
 
-    for (let type of types){
-      const viewExist = await Type.findOne({where:{name: type.name}
-      });
-      
-      viewExist? 
-      allTypes.push(viewExist)
-      : allTypes.push(await Type.create({name: type.name}));
-    }
-    
-    return allTypes;
-    }
+  for (let type of types) {
+    const viewExist = await Type.findOne({ where: { name: type.name } });
 
-                               ////! Post !!\\\
+    viewExist
+      ? allTypes.push(viewExist)
+      : allTypes.push(await Type.create({ name: type.name }));
+  }
 
-const createPokemon = async (
-  {name,
+  return allTypes;
+};
+
+////! Post !!\\\
+
+const createPokemon = async ({
+  name,
   hp,
   attack,
   type,
@@ -144,9 +140,8 @@ const createPokemon = async (
   defense,
   height,
   weight,
-  image,}
-) => {
-  
+  image,
+}) => {
   const pokemon = await Pokemon.create({
     name,
     hp,
@@ -162,5 +157,11 @@ const createPokemon = async (
   return pokemon;
 };
 
-module.exports = {getPokemons, createPokemon,getPokeById, PokemonsBYName, searchPokeType, getAllPokes};
-
+module.exports = {
+  getPokemons,
+  createPokemon,
+  getPokeById,
+  PokemonsBYName,
+  searchPokeType,
+  getAllPokes,
+};
